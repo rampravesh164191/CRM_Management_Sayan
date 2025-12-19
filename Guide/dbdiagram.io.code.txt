@@ -1,0 +1,128 @@
+//useCase
+//Employees of the company using the CRM.
+//Authentication, RBAC,Ownership of actions
+
+//relationships
+//One user owns many leads
+//One user logs many interactions
+//Manager views many users
+
+Table users {
+  id integer [primary key]
+  name varchar
+  email varchar //unique
+  password varchar //hashed
+  role varchar //admin, manager, sales_rep
+  isActive bool
+  created_at timestamp
+}
+
+//usecase
+//A potential customer or company.
+//Everything in CRM revolves around leads. 
+
+//relationship
+//One lead → many interactions
+//One lead → many documents
+//One lead → many follow-ups
+//One lead → many feedback entries
+
+Table leads {
+  id integer
+  name  varchar
+  email varchar
+  phone varchar
+  company varchar
+  industry varchar
+  location varchar
+  stage varchar //new, contacted, negotiating, won, lost
+  leadScore number
+  assignedTo userid_salesRep
+  createdBy userid
+  createdAt timestamp
+  updatedAt timestamp
+}
+
+//usecase - communication history
+//Every call, email, meeting, SMS.
+//Sales history = trust + context.Enum
+
+//relationship
+//Many interactions → one lead
+//Many interactions → one user
+
+Table interactions {
+  id varchar
+  leadId varchar
+  userId whoInteracted
+  type varchar //call, email, meeting, sms
+  notes varchar
+  interactionDate timestamp
+  duration time //for call,meetings
+}
+
+//usecase - remainder
+//“Call this lead tomorrow”,
+// “Send proposal next week”.
+//Sales fail due to missed follow-ups.
+//One lead → many follow-ups
+//One user → many reminders
+
+Table follow_up{
+  id varchar
+  leadId varchar
+  userId varchar
+  reminderDate date
+  notes varchar
+  status varchar //pending, done, missed
+}
+
+//usecase - file management
+//Contracts, proposals, PPTs, invoices 
+// Deals involve paperwork.
+//One lead → many documents
+//One user → many uploads
+
+Table documents{
+  id varchar
+  leadId varchar
+  uploadedBy userid
+  fileName varchar
+  fileUrl varchar
+  fileType varchar
+  version varchar
+  createdAt date
+}
+
+//usecase - lead quality
+//Sales rep’s opinion after interacting. 
+//Improves lead scoring logic over time. 
+
+//relationship
+//One lead → many feedback entries
+//One user → many feedbacks
+
+Table feedback{
+  id varchar
+  leadId varchar
+  userId varchar
+  rating integer
+  comments varchar 
+  createdAt varchar
+}
+
+Ref oneUserManyLeads: leads.assignedTo > users.id
+Ref oneUserLogsManyInteractions: interactions.userId > users.id
+//manager type user can view all users
+
+Ref oneLeadManyInteractions: interactions.leadId > leads.id
+Ref oneLeadManyDocuments: documents.leadId > leads.id
+Ref oneLeadManyFollowups: follow_up.leadId > leads.id
+Ref oneLeadManyFeedback: feedback.leadId > leads.id
+Ref oneUserManyReminder: follow_up.userId > users.id
+Ref oneUserManyUploads: documents.uploadedBy > users.id
+Ref oneUserManyFeedback: feedback.userId > users.id
+
+
+
+

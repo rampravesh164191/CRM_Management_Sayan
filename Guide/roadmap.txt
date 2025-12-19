@@ -1,0 +1,9 @@
+create database drawing on dbdiagram.io - just paste the code and it will work
+npm installed : express, mongoose, nodemon, bcrypt, jsonwebtoken
+//mongosh to get the database link 
+
+inorder to run backend : nodemon app.js || node app.js
+
+challenges :
+MondoDB local database not connecting -> 
+Window + R => services.msc => find MondoDB server or MongoDB -> right click -> start 
