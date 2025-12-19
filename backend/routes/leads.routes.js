@@ -27,4 +27,29 @@ LeadsRouter.post("/add-lead", authMiddleware(["manager","admin"]), async (req, r
     }
 })
 
+
+//delete lead
+LeadsRouter.delete("/leads/:leadId",authMiddleware(["manager","admin"]), async (req, res)=>{
+    try{
+        const {leadId} = req.params;
+        await LeadModelModel.findByIdAndDelete(leadId);
+        res.json({message : "successfully deleted lead"})
+    }catch(err){
+        res.json("error deleting lead");
+    }
+})
+
+//update lead
+LeadsRouter.patch("/leads/:leadId",authMiddleware(["manager","admin"]), async (req, res)=>{
+    try{
+        const {leadId} = req.params;
+        const updatedData = req.body;
+        await LeadModel.findByIdAndUpdate(leadId, updatedData);
+        const lead = await LeadModel.findById(leadId);
+        res.json({message : "lead data updated", lead});
+    }catch(err){ 
+        res.json({message : "error updating lead data", err})
+    }
+})
+
 module.exports = LeadsRouter;

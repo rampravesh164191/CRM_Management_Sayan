@@ -6,4 +6,15 @@ inorder to run backend : nodemon app.js || node app.js
 
 challenges :
 MondoDB local database not connecting -> 
-Window + R => services.msc => find MondoDB server or MongoDB -> right click -> start 
+Window + R => services.msc => find MondoDB server or MongoDB -> right click -> start
+
+
+Step 3: CRUD = 4 QUESTIONS
+ish route ko kon bula rha hai, kon sa model, ky doondhna hai, CRUD
+//basically know the rishta - relationship
+For every route, ask:
+Who is calling?
+What model?
+Find by what?
+Update/delete/create what?
+That’s it.
