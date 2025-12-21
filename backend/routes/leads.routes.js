@@ -16,6 +16,17 @@ LeadsRouter.get("/leads", authMiddleware(["manager","admin"]), async (req, res)=
     }
 })
 
+//fetch lead by id
+LeadsRouter.get("/leads/:leadId", authMiddleware(["admin","manager"]), async (req, res)=>{
+    try{
+        const {leadId} = req.params;
+        let lead = await LeadModel.find({_id:leadId});
+        res.json({message : "fetched Required lead", lead})
+    }catch(err){
+        res.json({message : "error fetching lead",err})
+    }
+})
+
 //adding leads
 LeadsRouter.post("/add-lead", authMiddleware(["manager","admin"]), async (req, res)=>{
     try{

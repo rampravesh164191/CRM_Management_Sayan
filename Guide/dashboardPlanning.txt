@@ -1,0 +1,94 @@
+------------------After login signup----------
+----what should i do next?
+Why NOT full dashboard now? (important)
+Right now:
+1. You don’t have leads flowing
+2. No interactions
+3. No pipeline data
+4. No scoring
+So dashboards would be:
+❌ Hardcoded numbers
+❌ Fake charts
+❌ You’ll rewrite everything later
+
+----do what
+👉 DO NOT jump into “full dashboards” yet
+👉 DO THIS NEXT (in this order):
+1️⃣ Define role powers (capabilities) — on paper
+2️⃣ Build ONE shared dashboard layout
+3️⃣ Build ONE real feature: Lead List + Lead Detail
+4️⃣ THEN enhance dashboards with metrics
+
+-------------------Dashboards without real data = fake progress.-------------------------
+
+Step 1️⃣ Decide POWERS (very important)
+
+Let’s lock this first.
+Simple, realistic, scalable.
+
+Admin (System Owner)
+
+Powers : Create users, Assign roles, See everything, Basic system stats
+❌ Admin does NOT work on leads daily
+
+Manager (Team Lead)
+Powers : View all leads, Assign leads to sales reps, See team performance, Edit lead stage, See pipeline
+
+Sales Rep (Executor)
+Powers : View only assigned leads, Update lead status, Add interactions (call, email, meeting), Add follow-up reminders
+❌ Cannot create users
+❌ Cannot delete leads
+
+👉 This mental model should drive your UI
+
+-------------------------------Step 2️⃣ Build ONE shared dashboard layout-----------------------
+DashboardLayout
+ ├── Sidebar (changes by role)
+ ├── Topbar
+ └── Main Content (routes)
+
+Each role:
+Sees different menu items
+Same layout
+This saves you tons of work.
+
+-----------------------------Step 3️⃣ The FIRST REAL FEATURE YOU SHOULD BUILD--------------------
+🔥 LEAD LIST + LEAD DETAIL
+
+*************************This is the heart of CRM.*****************
+
+Pages to build next (ONLY THESE)
+/dashboard/leads
+/dashboard/leads/:id
+
+Why this first?
+Because:
+1. Every role touches leads
+2. Dashboards need lead data
+3. Interactions attach to leads
+4. Reports depend on leads
+
+What should the UI show RIGHT NOW?
+For Sales Rep (first priority)
+Leads List
+Name	Status	Score	Next Follow-up
+
+Actions: View, Update status, Add note
+
+Lead Detail Page
+Sections: Lead info, Interaction timeline, Follow-up date, Lead score (static for now)
+
+Manager (same pages, extra powers) : Can see all leads, Can assign lead to sales rep, Can change deal stage
+
+Admin : Can see leads (read-only), Focus later on users & reports
+
+----------------------------------Step 4️⃣ Only AFTER that → Dashboards make sense---------------
+
+Once you have: Leads, Status, Assignments, Interactions
+
+Now dashboards become:
+✅ Meaningful
+✅ Automatic
+✅ Easy
+
+Dashboard metrics come from: Leads table, Interactions table, Users table

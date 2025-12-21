@@ -18,3 +18,44 @@ What model?
 Find by what?
 Update/delete/create what?
 That’s it.
+
+!! now as i have done with all modals and routes, i am confused what to do next
+!! so i just think it will be good to proceed with frontend 
+after login - dashboard for admin, manager and sales_rep will be different
+
+-----------------------------FRONTEND-------------------------------
+starting with just login things
+i realised that i should have first confirmed the tech stack i should use
+
+i have created the frontend for login and signup - CORS err (backend mei npm cors install kro)
+and app.js mei require cors and use(cors()) - done
+
+----what should i do next?
+Why NOT full dashboard now? (important)
+Right now:
+1. You don’t have leads flowing
+2. No interactions
+3. No pipeline data
+4. No scoring
+So dashboards would be:
+❌ Hardcoded numbers
+❌ Fake charts
+❌ You’ll rewrite everything later
+
+----do what
+👉 DO NOT jump into “full dashboards” yet
+👉 DO THIS NEXT (in this order):
+1️⃣ Define role powers (capabilities) — on paper
+2️⃣ Build ONE shared dashboard layout
+3️⃣ Build ONE real feature: Lead List + Lead Detail
+4️⃣ THEN enhance dashboards with metrics
+Dashboards without real data = fake progress.
+
+-----------> for more check dashboard planning.txt file
+
+--------issue facing : react css style via react dispay block 
+and display none pr not working
+
+---------------“React me DOM ko haath mat lagao”----------
+
+bug : dashboard mei view button pe initially 2 times click krne pe show hoga

@@ -9,7 +9,7 @@ const UserRouter = express.Router();
 
 
 //get all users
-UserRouter.get("/users", async (req, res) => {
+UserRouter.get("/users", authMiddleware(["admin"]), async (req, res) => {
     try {
         const users = await UserModel.find();
         res.json({ message: "fetched all users", users })
@@ -50,7 +50,7 @@ UserRouter.post("/login", async (req, res) => {
                 if (result) {
                     const accessToken = jwt.sign({ userID: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: 1800 });
                     const refreshToken = jwt.sign({ userID: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: 1800 });
-                    res.status(200).json({ msg: "login success", accessToken, refreshToken })
+                    res.status(200).json({ message: "login success", accessToken, refreshToken, user})
                 } else {
                     res.status(200).json({ message: "Wrong password" })
                 }
@@ -86,19 +86,42 @@ UserRouter.patch("/users/:userId", authMiddleware(["manager", "admin"]), async (
     }
 })
 
-//lead count
-UserRouter.get("/users/:userId/lead-count",authMiddleware(["manager", "admin"]),async (req, res) => {
+//sales_rep leads count : assigned to
+UserRouter.get("/users/:sales_rep_id/leads",authMiddleware(["manager", "admin"]),async (req, res) => {
         try {
-            const { userId } = req.params;
+            const { sales_rep_id } = req.params;
             // const count = await LeadModel.countDocuments({assignedTo: userId});
-            const leads = await LeadModel.find({assignedTo: userId}).populate("assignedTo");
+            const leads = await LeadModel.find({assignedTo: sales_rep_id}).populate("assignedTo");
 
-            res.json({userId,LeadsData: leads});
+            res.json({message : "Leads fetched Successfully", leads,total: leads.length});
         } catch (err) {
             res.status(500).json({ message: "Error fetching lead count",err});
         }
     }
 );
+//leads created by manager : createdBy
+UserRouter.get("/users/:manager_id/lead-count",authMiddleware(["manager", "admin"]),async (req, res) => {
+        try {
+            const { manager_id } = req.params;
+            // const count = await LeadModel.countDocuments({assignedTo: userId});
+            const leads = await LeadModel.find({createdBy: manager_id});
+
+            res.json({message : "Leads fetched Successfully", leads,total: leads.length});
+        } catch (err) {
+            res.status(500).json({ message: "Error fetching lead count",err});
+        }
+    }
+);
+
+UserRouter.get("/users/:userId", async (req, res)=>{
+    try{
+        const {userId} = req.params;
+        const user = await UserModel.find({userId});
+        res.json({message : "User found successfully", user})
+    }catch(err){
+        res.json({message : "Error finding user", err})
+    }
+})
 
 
 
