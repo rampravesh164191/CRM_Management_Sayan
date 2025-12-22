@@ -33,6 +33,8 @@ function Login() {
       console.log(data.user, res);
       setMessage(data.message || "Login successful");
 
+      window.location.href = "/dashboard";
+
       // token save
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
