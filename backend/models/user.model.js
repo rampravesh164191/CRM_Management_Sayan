@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ["sales_rep", "manager", "admin"],
-    default: "sales_rep"
+    required : true
   },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });

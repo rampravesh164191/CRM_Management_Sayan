@@ -58,4 +58,6 @@ and display none pr not working
 
 ---------------“React me DOM ko haath mat lagao”----------
 
-bug : dashboard mei view button pe initially 2 times click krne pe show hoga
+//connect database to server 
+issue : you're trying to access the database from an IP that isn't whitelisted.
+-- this is classical error -: altal me jaake network access sets to from anywhere or current ip address
