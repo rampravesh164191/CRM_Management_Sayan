@@ -1,9 +1,20 @@
-// src/pages/AdminDashboard.tsx
 import { useState } from "react";
 import { baseURL } from "../../utils/constants";
 
+interface UserForm {
+  name: string;
+  email: string;
+  password: string;
+  role: "sales_rep" | "manager" | "admin";
+  isActive: boolean;
+}
+
+interface SignupResponse {
+  message?: string;
+}
+
 export default function AdminDashboard() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<UserForm>({
     name: "",
     email: "",
     password: "",
@@ -12,17 +23,21 @@ export default function AdminDashboard() {
   });
   const [message, setMessage] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type } = e.target;
+    const checked =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked! : value,
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
     try {
       const res = await fetch(`${baseURL}/api/signup`, {
         method: "POST",
@@ -32,7 +47,7 @@ export default function AdminDashboard() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
+      const data: SignupResponse = await res.json();
       setMessage(data.message || "Signup complete");
     } catch (err) {
       setMessage("Signup failed");
@@ -44,7 +59,15 @@ export default function AdminDashboard() {
       <h2>Admin Dashboard</h2>
       <h3>Create New User</h3>
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px", maxWidth: "400px" }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          maxWidth: "400px",
+        }}
+      >
         <input
           type="text"
           name="name"

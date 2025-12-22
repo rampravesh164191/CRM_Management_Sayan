@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import LeadsPage from "./pages/dashboard/LeadsPage";
 import Users from "./pages/dashboard/Users";
+import type { ReactNode } from "react";
 
 
 
@@ -12,10 +13,12 @@ import Users from "./pages/dashboard/Users";
  * Simple auth check
  * Later you can enhance with role-based checks
  */
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const token = localStorage.getItem("accessToken");
   return token ? children : <Navigate to="/login" replace />;
 };
+
 
 function App() {
   return (

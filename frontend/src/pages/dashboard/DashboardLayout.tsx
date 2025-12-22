@@ -7,7 +7,7 @@ import ManagerDashboard from "./ManagerDashboard";
 import AdminDashboard from "./AdminDashboard";
 
 const DashboardLayout = () => {
-  const role = localStorage.getItem("role"); // 'sales_rep', 'manager', 'admin'
+  const role = localStorage.getItem("role") as "sales_rep" | "manager" | "admin" | null; // 'sales_rep', 'manager', 'admin'
   const location = useLocation();
 
   // Redirect to login if no role found

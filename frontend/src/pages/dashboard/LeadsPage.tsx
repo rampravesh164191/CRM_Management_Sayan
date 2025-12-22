@@ -19,6 +19,16 @@ interface Lead {
   assignedTo: string;
 }
 
+interface LeadsResponse {
+  message?: string;
+  leads?: Lead[];
+}
+
+interface LeadDetailResponse {
+  message?: string;
+  lead: Lead[];
+}
+
 const LeadsPage = () => {
   const [message, setMessage] = useState("");
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -45,13 +55,17 @@ const LeadsPage = () => {
         throw new Error("Failed to fetch leads");
       }
 
-      const data = await res.json();
+      const data: LeadsResponse = await res.json();
       console.log("API data :", data);
 
-      setLeads(data.leads || []);
-      setMessage(data.message || "Fetched leads");
-    } catch (err: any) {
-      setError(err.message || "Login Failed");
+      setLeads(data.leads ?? []);
+      setMessage(data.message ?? "Fetched leads");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Login Failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -75,14 +89,17 @@ const LeadsPage = () => {
         throw new Error("Failed to fetch lead details");
       }
 
-      const data = await res.json();
+      const data: LeadDetailResponse = await res.json();
       console.log(data.lead);
 
-      // assuming API returns an array
-      setViewLead(data.lead[0]);
+      setViewLead(data.lead[0] ?? null);
       setShowDetail(true);
-    } catch (err: any) {
-      setError(err.message || "Could not load lead details");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Could not load lead details");
+      }
     }
   };
 

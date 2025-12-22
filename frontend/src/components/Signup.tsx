@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { baseURL } from "../utils/constants";
 
+interface SignupResponse {
+  message?: string;
+}
+
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("sales_rep");
-  const [isActive, setIsActive] = useState(true); // boolean, not string
+  const [isActive, setIsActive] = useState(true);
   const [message, setMessage] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const userObj = { name, email, password, role, isActive };
@@ -23,9 +27,8 @@ function Signup() {
         body: JSON.stringify(userObj),
       });
 
-      const data = await res.json();
+      const data: SignupResponse = await res.json();
       setMessage(data.message || "Signup Successful");
-      // navigate("/login") if using react-router
     } catch (err) {
       setMessage("Signup Failed");
       console.error(err);
@@ -40,7 +43,9 @@ function Signup() {
           type="text"
           placeholder="Enter Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
           required
         />
 
@@ -48,7 +53,9 @@ function Signup() {
           type="email"
           placeholder="Enter Email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
           required
         />
 
@@ -56,11 +63,18 @@ function Signup() {
           type="password"
           placeholder="Enter Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPassword(e.target.value)
+          }
           required
         />
 
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <select
+          value={role}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setRole(e.target.value)
+          }
+        >
           <option value="sales_rep">Sales Rep</option>
           <option value="manager">Manager</option>
           <option value="admin">Admin</option>
@@ -70,7 +84,9 @@ function Signup() {
           <input
             type="checkbox"
             checked={isActive}
-            onChange={(e) => setIsActive(e.target.checked)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setIsActive(e.target.checked)
+            }
           />
           Active User
         </label>
