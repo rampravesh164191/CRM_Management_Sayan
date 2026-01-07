@@ -61,3 +61,29 @@ and display none pr not working
 //connect database to server 
 issue : you're trying to access the database from an IP that isn't whitelisted.
 -- this is classical error -: altal me jaake network access sets to from anywhere or current ip address
+
+//frontend - faced huge issue while deployment
+//i have named the file wrong itself instead of "vercel" i wrote "varcel"
+
+vercel.json 
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+} 
+
+// and put favicon.ico in public folder
+
+varcel -> add project -> select repo and folder of frontend
+npm run build 
+dist 
+npm install
+VITE_BASE_URL : https://crm-management-sayan.onrender.com
+
+
+----------------------after long time like 20days---------
+after RPG clearance notification
+
+here something about haveing LICENSE in project means anyone can leagally look at my project
+no license means you can't even look at my code
+so i made LICENSE file in the project
