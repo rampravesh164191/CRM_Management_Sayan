@@ -12,3 +12,10 @@ is should show this is unauthorized message
 8: if the user is logged out while adding lead he will have to refill the details after logged in again
 9: i have thought of like generating leads with AI.
 10 : add delete leads, users functionality
+
+
+//making window popup in mid of the screen 
+<div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+          </div>
+      </div>

@@ -31,10 +31,11 @@ LeadsRouter.get("/leads/:leadId", authMiddleware(["admin","manager"]), async (re
 LeadsRouter.post("/addlead", authMiddleware(["manager","admin"]), async (req, res)=>{
     try{
         //attach the userId from auth middleware
-        let lead = await LeadModel.create({...req.body,createdBy:req.user})
+        let lead = await LeadModel.create({...req.body,createdBy:req.user.id})
         res.status(200).json({message : "lead added", lead})
     }catch(err){
-        res.status(500).json({message : "failed adding lead", err})
+        console.log(err.message)
+        res.status(500).json({message : err.message})
     }
 })
 

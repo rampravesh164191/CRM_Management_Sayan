@@ -36,7 +36,82 @@ const LeadsData = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  //just for controlling form visibility
+  const [isVisible, setIsVisible] = useState<string | null>(null);
 
+  //generate lead part
+  const [newLead, setNewLead] = useState<Omit<Lead, "_id" | "createdBy" | "assignedTo">>({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    industry: "",
+    location: "",
+    dealValue: 0,
+    stage: "",
+    leadScore: 0,
+    source: "",
+  });
+
+  //let's say if i want something to change even after generation
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewLead({ ...newLead, [e.target.name]: e.target.value });
+  };
+
+  //changes made after auto lead generation
+  const fillWithGeneratedLead = () => {
+    setNewLead(generateLead());
+  };
+
+  const submitNewLead = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("accessToken")
+      const res = await fetch(`${baseURL}/api/addlead`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(newLead),
+      });
+      const data = await res.json();
+      setMessage(data.message || "Lead added");
+      // setIsVisible(null);
+      getLeads(); // refresh table
+    } catch (err) {
+      setError("Failed to add lead");
+    }
+  };
+
+  //auto lead genetator
+  function generateLead(): Omit<Lead, "_id" | "createdBy" | "assignedTo"> {
+    const names = ["Lucas Martinez", "Hiroshi Tanaka", "Fatima Al-Sayed", "Elena Petrova", "Kwame Mensah", "Isabella Rossi",
+      "Diego Fernandez", "Mei Ling Chen", "Omar Hassan", "Sophia Müller", "Jean Dupont", "Aisha Bello", "Carlos Silva", "Nora Johansson",
+      "Rajesh Iyer", "Leila Haddad", "Tomás Oliveira", "Anna Kowalska", "Mohammed Rahman", "Chloe Anderson"];
+    const industries = ["Retail", "IT Services", "Manufacturing", "Freelancer", "Creative Agency"];
+    const locations = ["Delhi", "Mumbai", "Ahmedabad", "Bangalore", "Chennai"];
+    const sources = ["website", "linkedin", "referral", "event", "cold_call"];
+    const stages = ["new", "contacted", "qualified", "proposal", "negotiation", "closed"];
+
+    const name = names[Math.floor(Math.random() * names.length)];
+    const email = name.toLowerCase().replace(" ", ".") + "@gmail.com";
+    const phone = "9" + Math.floor(100000000 + Math.random() * 900000000).toString();
+
+    return {
+      name,
+      email,
+      phone,
+      company: "Demo Company",
+      industry: industries[Math.floor(Math.random() * industries.length)],
+      location: locations[Math.floor(Math.random() * locations.length)],
+      dealValue: Math.floor(Math.random() * 200000),
+      stage: stages[Math.floor(Math.random() * stages.length)],
+      leadScore: Math.floor(Math.random() * 100),
+      source: sources[Math.floor(Math.random() * sources.length)],
+    };
+  }
+  //generate lead part end
   const getLeads = async () => {
     setLoading(true);
     setError("");
@@ -116,10 +191,15 @@ const LeadsData = () => {
 
       {/* Search & Filter */}
       <div style={{ margin: "16px 0" }}>
-        <input
+        {/* <input
           placeholder="Search leads..."
           style={{ padding: "8px", width: "250px" }}
-        />
+        /> */}
+        <span>Auto Generate Lead feature also available : </span>
+        <button
+        className="border flex flex-row items-center justify-center px-3 rounded-lg bg-green-500 text-white font-semibold hover:bg-green-600 active:bg-green-800 outline-2 outline-offset-2 active:outline-green-500"
+        onClick={()=>setIsVisible("visible")}
+        ><span className="text-[20px]">+</span>Add leads</button>
       </div>
 
       {/* Lead Detail Modal/Box */}
@@ -170,6 +250,62 @@ const LeadsData = () => {
           ))}
         </tbody>
       </table>
+      {/* generate lead  */}
+      {isVisible && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="relative bg-white p-6 rounded-lg shadow-lg w-[400px]">
+          <span 
+          onClick={()=>setIsVisible(null)}
+          className="border absolute right-5 inline-block px-3 rounded-full bg-red-500 text-white hover:bg-red-600 cursor-pointer">X</span>
+          <h3 className="text-center my-2">Add New Lead</h3>
+          <form onSubmit={submitNewLead}>
+            <input
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="name" value={newLead.name} onChange={handleChange} placeholder="Name" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="email" value={newLead.email} onChange={handleChange} placeholder="Email" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="phone" value={newLead.phone} onChange={handleChange} placeholder="Phone" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="company" value={newLead.company} onChange={handleChange} placeholder="Company" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="industry" value={newLead.industry} onChange={handleChange} placeholder="Industry" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="location" value={newLead.location} onChange={handleChange} placeholder="Location" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="dealValue" type="number" value={newLead.dealValue} onChange={handleChange} placeholder="Deal Value" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="stage" value={newLead.stage} onChange={handleChange} placeholder="Stage" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="leadScore" type="number" value={newLead.leadScore} onChange={handleChange} placeholder="Lead Score" required />
+            <input 
+            className="border w-full px-2 py-1 rounded-lg my-1" 
+            name="source" value={newLead.source} onChange={handleChange} placeholder="Source" required />
+
+            <div className="flex items-center justify-between my-1">
+              <button className="border px-2 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-white outline-2 active:bg-blue-800 active:outline-blue-500 active:outline-offset-2" type="button" onClick={fillWithGeneratedLead}>Generate Lead</button>
+              <button
+              // just giving any random string to run 
+              onClick={()=>setIsVisible("visible")}
+               className="border px-2 py-1 rounded-lg bg-green-500 active:bg-green-800 hover:bg-green-600 text-white outline-2 active:outline-green-500 active:outline-offset-2" type="submit">Submit Lead</button>
+            </div>
+          </form>
+          {message != "lead added" ? (
+                <h3 className="text-center my-2 text-red-500">{message}</h3>
+            ) : (
+                <h3 className="text-center my-2 text-green-500">{message}</h3>
+            )}
+        </div>
+      </div>
+      )}
     </div>
   );
 };

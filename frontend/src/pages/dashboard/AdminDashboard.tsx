@@ -1,120 +1,59 @@
-import { useState } from "react";
-import { baseURL } from "../../utils/constants";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 
-interface UserForm {
-  name: string;
-  email: string;
-  password: string;
-  role: "sales_rep" | "manager" | "admin";
-  isActive: boolean;
+interface SalesData {
+  month: string;
+  sales: number;
 }
 
-interface SignupResponse {
-  message?: string;
+interface PipelineData {
+  stage: string;
+  count: number;
 }
 
-export default function AdminDashboard() {
-  const [formData, setFormData] = useState<UserForm>({
-    name: "",
-    email: "",
-    password: "",
-    role: "sales_rep",
-    isActive: true,
-  });
-  const [message, setMessage] = useState("");
+const data: SalesData[] = [
+  { month: "Jan", sales: 400 },
+  { month: "Feb", sales: 600 },
+  { month: "Mar", sales: 800 },
+  { month: "Apr", sales: 700 },
+];
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
-    const checked =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined;
+const pipelineData: PipelineData[] = [
+  { stage: "Qualified", count: 10 },
+  { stage: "Proposal", count: 7 },
+  { stage: "Negotiation", count: 5 },
+  { stage: "Won", count: 3 },
+];
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked! : value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`${baseURL}/api/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `bearer ${localStorage.getItem("accessToken")}`,
-        },
-        body: JSON.stringify(formData),
-      });
-      const data: SignupResponse = await res.json();
-      setMessage(data.message || "Signup complete");
-    } catch (err) {
-      setMessage("Signup failed");
-    }
-  };
-
+export default function ManagerDashboard() {
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Admin Dashboard</h2>
-      <h3>Create New User</h3>
-
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          maxWidth: "400px",
-        }}
-      >
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-
-        <select name="role" value={formData.role} onChange={handleChange}>
-          <option value="sales_rep">Sales Rep</option>
-          <option value="manager">Manager</option>
-          <option value="admin">Admin</option>
-        </select>
-
-        <label>
-          <input
-            type="checkbox"
-            name="isActive"
-            checked={formData.isActive}
-            onChange={handleChange}
-          />
-          Active
-        </label>
-
-        <button type="submit">Signup User</button>
-      </form>
-
-      {message && <p>{message}</p>}
+    <div>
+      <h4>Admin Dashboard</h4>
+      <LineChart width={500} height={300} data={data}>
+        <CartesianGrid stroke="#ccc" />
+        <XAxis dataKey="month" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="sales" stroke="#007bff" />
+      </LineChart>
+      <BarChart width={500} height={300} data={pipelineData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="stage" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="count" fill="#8884d8" />
+      </BarChart>
     </div>
   );
 }

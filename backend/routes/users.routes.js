@@ -12,9 +12,9 @@ const UserRouter = express.Router();
 UserRouter.get("/users", authMiddleware(["admin"]), async (req, res) => {
     try {
         const users = await UserModel.find();
-        res.json({ message: "fetched all users", users })
+        res.json({ message: "fetched all Employees", users })
     } catch (err) {
-        res.json({ message: "error fetching users data", err })
+        res.json({ message: "error fetching Employees data", err })
     }
 })
 
@@ -32,7 +32,8 @@ UserRouter.post("/signup", async (req, res) => {
             }
         })
     } catch (err) {
-        res.json({ message: "signup failed", err })
+        console.log(err.message); 
+        res.json({ message: "signup failed", Error : err.message })
     }
 })
 

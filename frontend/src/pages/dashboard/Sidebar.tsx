@@ -21,7 +21,7 @@ const Sidebar = () => {
     ],
     admin: [
       { label: "Dashboard", path: "/dashboard" },
-      { label: "Users", path: "/dashboard/users" },
+      { label: "Employees", path: "/dashboard/employees" },
       { label: "All Leads", path: "/dashboard/leadsdata"},
       { label: "Add Leads", path: "/dashboard/addleads"},
       { label: "Reports", path: "/dashboard/reports" },

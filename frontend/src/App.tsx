@@ -1,14 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./components/Navbar";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import LeadsPage from "./pages/dashboard/LeadsPage";
-import Users from "./pages/dashboard/Users";
 import type { ReactNode } from "react";
 import LandingPage from "./pages/dashboard/LandingPage";
 import LeadsData from "./pages/dashboard/LeadsData";
 import AddLeads from "./pages/dashboard/AddLeads";
+import Employees from "./pages/dashboard/Employees";
 
 
 
@@ -44,7 +43,7 @@ function App() {
         >
           {/* Nested dashboard pages */}
           <Route path="leads" element={<LeadsPage />} />
-          <Route path="users" element={<Users />} />
+          <Route path="employees" element={<Employees />} />
           <Route path="leadsdata" element={<LeadsData/>}/>
           <Route path="addleads" element={<AddLeads/>} />
           {/* later:
