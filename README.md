@@ -14,22 +14,22 @@ https://crm-management-sayan-osbvuu1wq-rams-projects-eab30cd6.vercel.app/signup
 ## 📸 Screenshots
 
 ### Landing Page
-![Landing Page](./frontend/src/assets/readme_images/HomePage.png)
+![Landing Page](./frontend/src/assets/readme_images/landingpage.png)
 
 ---
 
-### CRM Dashboard
-![Dashboard](./assets/readMe_Images/TodosPage.png)
+### Admin Dashboard
+![Dashboard](./frontend/src/assets/readme_images/employee.png)
 
 ---
 
 ### Add Lead / Activity
-![Add Lead](./assets/readMe_Images/Add%20Todo%20Modal.png)
+![Add Lead](./frontend/src/assets/readme_images/addLeads.png)
 
 ---
 
-### Update Lead / Activity
-![Update Lead](./assets/readMe_Images/Update%20Todo%20Modal.png)
+### Update User / Activity
+![Update Lead](./frontend/src/assets/readme_images/editEmployee.png)
 
 ---
 
