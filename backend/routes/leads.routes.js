@@ -9,10 +9,10 @@ const LeadModel = require("../models/leads.models");
 //fetch all leads
 LeadsRouter.get("/leads", authMiddleware(["manager","admin"]), async (req, res)=>{
     try{
-        let leads = await LeadModel.find({createdBy : req.user});
-        res.status(200).json({message : "leads list", leads});
+        let leads = await LeadModel.find();
+        res.status(200).json({message : "Fetched all leads", leads});
     }catch(err){
-        res.status(500).json({message : "failed adding list",err});
+        res.status(500).json({message : "failed fetching leads",Error : err.message});
     }
 })
 
@@ -28,7 +28,7 @@ LeadsRouter.get("/leads/:leadId", authMiddleware(["admin","manager"]), async (re
 })
 
 //adding leads
-LeadsRouter.post("/add-lead", authMiddleware(["manager","admin"]), async (req, res)=>{
+LeadsRouter.post("/addlead", authMiddleware(["manager","admin"]), async (req, res)=>{
     try{
         //attach the userId from auth middleware
         let lead = await LeadModel.create({...req.body,createdBy:req.user})

@@ -6,6 +6,10 @@ import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import LeadsPage from "./pages/dashboard/LeadsPage";
 import Users from "./pages/dashboard/Users";
 import type { ReactNode } from "react";
+import LandingPage from "./pages/dashboard/LandingPage";
+import LeadsData from "./pages/dashboard/LeadsData";
+import AddLeads from "./pages/dashboard/AddLeads";
+
 
 
 
@@ -23,12 +27,11 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 function App() {
   return (
     <>
-      <Navbar />
-
       <Routes>
         {/* Public Routes */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/landingPage" element={<LandingPage />} />
 
         {/* Protected Dashboard Routes */}
         <Route
@@ -42,6 +45,8 @@ function App() {
           {/* Nested dashboard pages */}
           <Route path="leads" element={<LeadsPage />} />
           <Route path="users" element={<Users />} />
+          <Route path="leadsdata" element={<LeadsData/>}/>
+          <Route path="addleads" element={<AddLeads/>} />
           {/* later:
               /dashboard/users
               /dashboard/reports
@@ -50,10 +55,11 @@ function App() {
         </Route>
 
         {/* Default fallback */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/landingpage" replace />} />
       </Routes>
     </>
   );
 }
 
 export default App;
+

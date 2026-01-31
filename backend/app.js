@@ -5,16 +5,15 @@ const connectToDB = require("./config/db.config");
 const UserRouter = require("./routes/users.routes");
 const LeadsRouter = require("./routes/leads.routes");
 const app = express();
-app.use(cors()); //cors middleware
-
 const PORT = process.env.PORT;
 connectToDB();
+app.use(cors()); //cors middleware
 
 //body parser middleware
 app.use(express.json())
 
 //test route
-app.get("/test",(req, res)=>{
+app.get("/test",(req, res)=>{ 
     try{
         res.json({message : "Test route is working fine"})
     }catch(err){
@@ -27,7 +26,7 @@ app.use("/api", UserRouter)
 
 //handling leads routes
 app.use("/api", LeadsRouter);
-
+  
 // wrong route handler
 app.use((req, res) => {
     res.status(404).json({

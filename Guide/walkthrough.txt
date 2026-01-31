@@ -1,0 +1,59 @@
+backend .env = > MONGO_URI : controls where data is saving - local or server
+frontend => constant.tsx => base url : which backend is running => rendered one || local one
+
+frontend runs at http://localhost:5173 
+backend runs at http://localhost:3000
+causes : CORS issue : solved by app.use(cors());
+
+constant.tsx 
+    ---> local will run the backend written in your system
+    ---> deployed linke will run the previous deployed backend rules (old but working)
+
+//user signin
+postman http://localhost:3000/api/signup (POST method)
+//raw data needed
+{
+    "name" :"Mr.Potato",
+    "email" :"potato@gmail.com",
+    "password" :"1234",
+    "role" : "admin",
+    "isActive" : true
+}
+//result : Signup success
+
+//login  
+postman : http://localhost:3000/api/login (POST method)
+//raw data needed
+{
+    "email" : "potato@gmail.com",
+    "password": "1234"
+}
+//result : 
+{
+    "message": "Login Success",
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2OTdjYTk0ODJlOTMyOGJhNjRmNjYxZDciLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk3Nzc4OTEsImV4cCI6MTc2OTc3OTY5MX0.RLysivha4ZgelEYR-De_L7tgUIZWpQ-PCRZuwjblSgs",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2OTdjYTk0ODJlOTMyOGJhNjRmNjYxZDciLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk3Nzc4OTEsImV4cCI6MTc2OTc3OTY5MX0.RLysivha4ZgelEYR-De_L7tgUIZWpQ-PCRZuwjblSgs",
+    "user": {
+        "_id": "697ca9482e9328ba64f661d7",
+        "name": "Mr.Potato",
+        "email": "potato@gmail.com",
+        "password": "$2b$10$Lq7eA3bNFoUnNL7uwugSc.Gx/rZkj79R7sEisX89mi7pN.UKrSdj.",
+        "role": "admin",
+        "isActive": true,
+        "createdAt": "2026-01-30T12:51:20.712Z",
+        "updatedAt": "2026-01-30T12:51:20.712Z",
+        "__v": 0
+    }
+}
+
+//Fetch all leads 
+http://localhost:3000/api/leads (GET Request)
+headers
+Authorization : Bearer accessToken
+
+click on view button to see full detail of a lead
+
+//Login success -> dashboardLayout.tsx : decides which dashboard to open (admin, manager or sales_rep)
+//each dashboard have (sidebar.tsx, topbar.tsx, dashboard of user)
+//sidebar.tsx decides which page to navigate. also what content to show based on roles.
+//topbar.tsx you can logout.

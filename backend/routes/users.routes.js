@@ -28,7 +28,7 @@ UserRouter.post("/signup", async (req, res) => {
             } else {
                 console.log("rawpassword :", password, "hashedpassword : ", hash);
                 await UserModel.create({ name, email, password: hash, role, isActive })
-                res.status(201).json({ message: "signup success" })
+                res.status(201).json({ message: "Signup Successful" })
             }
         })
     } catch (err) {
@@ -50,14 +50,14 @@ UserRouter.post("/login", async (req, res) => {
                 if (result) {
                     const accessToken = jwt.sign({ userID: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: 1800 });
                     const refreshToken = jwt.sign({ userID: user._id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: 1800 });
-                    res.status(200).json({ message: "login success", accessToken, refreshToken, user})
+                    res.status(200).json({ message: "Login Success", accessToken, refreshToken, user})
                 } else {
                     res.status(200).json({ message: "Wrong password" })
                 }
             })
         }
     } catch (err) {
-        res.status(500).json({ message: "Error login", err })
+        res.status(500).json({ message: "Login Failed", err })
     }
 })
 

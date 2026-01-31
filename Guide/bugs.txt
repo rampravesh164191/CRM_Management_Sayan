@@ -1,0 +1,14 @@
+1. if someone has logged in but didnt logged out, and someone else tries to login with wrong credentials will still will be logged in
+2. so the error that was causing responsiveness issue was <body></body> element 
+3. if someone is already logged in, you will be end up in his account 
+4. Huge headache : somehow i am able to do operations in atlas cloud server but local mongoDB is giving me cors issue. ****** 
+   - nodejs install, everything looks working but somehow still issue
+   - whatever for now let's go with the atlas
+
+5. If you ever get confused in React-router-dom -> just checkout App.jsx
+6. add leads still missing created by and assigned to 
+7. trying to add lead from employee side showing success but data is not getting added on DB 
+is should show this is unauthorized message
+8: if the user is logged out while adding lead he will have to refill the details after logged in again
+9: i have thought of like generating leads with AI.
+10 : add delete leads, users functionality

@@ -1,52 +1,58 @@
-const jwt = require("jsonwebtoken")
-const authMiddleware = (role) => {
-    return (req, res, next) => {
-        let decoded;
-        try {
-            let token = req.headers?.authorization?.split(" ")[1];
-            console.log(token)
-            if (token) {
-                decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-                console.log(decoded, "i am decoded");
+const jwt = require("jsonwebtoken");
 
-                console.log("Passed through auth middleware");
-            } else {
-                res.status(400).json({ message: "token not found, please login again" })
+const authMiddleware = (roles = []) => {
+    return (req, res, next) => {
+        try {
+            // Extract token from Authorization header
+            const token = req.headers?.authorization?.split(" ")[1];
+            if (!token) {
+                return res.status(400).json({ message: "Token not found, please login again" });
             }
-        } catch (err) {
-            if (err.message == "jwt expired") {
-                // we need to generate new access token with the help of refresh token 
-                //check the validity of refresh token  and issue new access token
-                let refreshToken = req.headers?.refreshtoken?.split(" ")[1];
-                let refreshTokenDecoded = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY);
-                if(refreshTokenDecoded){
-                    console.log("Access token expired, new token generated")
-                    //userId and role from refreshTokenDecoded
-                    let newAccessToken = jwt.sign({
-                         userID: refreshTokenDecoded.userId, role: refreshTokenDecoded.role },
-                          process.env.JWT_SECRET_KEY, {expiresIn : 1800});
-                    decoded = jwt.verify(newAccessToken, process.env.JWT_SECRET_KEY);
-                }else{
-                    res.status(403).json({ message: "token expired, login again" })
+
+            // Verify access token
+            let decoded;
+            try {
+                decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+            } catch (err) {
+                if (err.message === "jwt expired") {
+                    // Handle expired access token with refresh token
+                    const refreshToken = req.headers?.refreshtoken?.split(" ")[1];
+                    if (!refreshToken) {
+                        return res.status(403).json({ message: "Refresh token missing, login again" });
+                    }
+
+                    try {
+                        const refreshDecoded = jwt.verify(refreshToken, process.env.JWT_SECRET_KEY);
+                        // Generate new access token
+                        const newAccessToken = jwt.sign(
+                            { userID: refreshDecoded.userId, role: refreshDecoded.role },
+                            process.env.JWT_SECRET_KEY,
+                            { expiresIn: 1800 } // 30 minutes
+                        );
+                        decoded = jwt.verify(newAccessToken, process.env.JWT_SECRET_KEY);
+                    } catch {
+                        return res.status(403).json({ message: "Refresh token invalid or expired, login again" });
+                    }
+                } else {
+                    return res.status(500).json({ message: "Token verification failed" });
                 }
-            } else {
-                res.status(500).json({ message: "something went wrong" })
             }
-        }
-        if (decoded) {
-            //attach the decrypted data to the request
-            //  if (role == decoded.role) for giving access to multiple roles
-            if (role.includes(decoded.role)) {
-                req.user = decoded.userID;
-                console.log(req.user, "is this correct")
-                next();
-            } else {
-                res.status(401).json({ msg: "role is not matching" })
+
+            // Attach user info to request
+            req.user = { id: decoded.userID, role: decoded.role };
+
+            // Role-based access control (if roles were specified)
+            if (roles.length > 0 && !roles.includes(decoded.role)) {
+                return res.status(403).json({ message: "You are not authorized for this action" });
             }
-        } else {
-            res.status(403).json({ message: "login failed please login again" })
+
+            // Passed authentication & role check
+            next();
+        } catch (error) {
+            console.error("Auth middleware error:", error);
+            return res.status(500).json({ message: "Something went wrong in authentication" });
         }
-    }
-}
+    };
+};
 
 module.exports = authMiddleware;

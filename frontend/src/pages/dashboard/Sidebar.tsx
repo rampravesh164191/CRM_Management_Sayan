@@ -11,15 +11,19 @@ const Sidebar = () => {
       { label: "Dashboard", path: "/dashboard" },
       { label: "My Leads", path: "/dashboard/leads" },
       { label: "Follow-ups", path: "/dashboard/followups" },
+      { label: "Add Leads", path: "/dashboard/addleads"},
     ],
     manager: [
       { label: "Dashboard", path: "/dashboard" },
-      { label: "All Leads", path: "/dashboard/leads" },
+      { label: "Team Leads", path: "/dashboard/leads" },
       { label: "Team Performance", path: "/dashboard/team" },
+      { label: "Add Leads", path: "/dashboard/addleads"},
     ],
     admin: [
       { label: "Dashboard", path: "/dashboard" },
       { label: "Users", path: "/dashboard/users" },
+      { label: "All Leads", path: "/dashboard/leadsdata"},
+      { label: "Add Leads", path: "/dashboard/addleads"},
       { label: "Reports", path: "/dashboard/reports" },
     ],
   };
